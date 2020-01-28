@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/smart-home-oss/web-ui.svg?branch=master)](https://travis-ci.com/smart-home-oss/web-ui)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=smart-home-oss_web-ui&metric=alert_status)](https://sonarcloud.io/dashboard?id=smart-home-oss_web-ui)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
