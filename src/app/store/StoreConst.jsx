@@ -1,0 +1,1 @@
+export const SMART_HOME_HOST: string = "http://localhost:8080";
