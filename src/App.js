@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import {Route} from "react-router-dom";
 import Menu from "./app/menu/Menu";
 import HousesComponent from "./app/houses/HousesComponent";
@@ -11,13 +11,15 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 <Route component={Menu}/>
 
-                <Route exact path='/houses' component={HousesComponent} />
-                <Route exact path='/houses/:houseId' component={HouseDetailsComponent} />
-                <Route exact path='/devices' component={DevicesComponent} />
-                <Route exact path='/devices/:houseId' component={DeviceDetailsComponent} />
+                <div className="notification">
+                    <Route exact path='/houses' component={HousesComponent} />
+                    <Route exact path='/houses/:houseId' component={HouseDetailsComponent} />
+                    <Route exact path='/devices' component={DevicesComponent} />
+                    <Route exact path='/devices/:houseId' component={DeviceDetailsComponent} />
+                </div>
             </div>
         );
     }

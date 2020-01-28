@@ -14,20 +14,42 @@ class HousesComponent extends React.Component<EmptyProps> {
 
     render() {
 
-        let li: [] = <li>No houses found</li>;
+        let trs: [] = <li>No houses found</li>;
         let key = new KeyHelper();
 
         if (housesStore.houses) {
-            li = [];
+            trs = [];
             housesStore.houses.forEach((value: House) => {
-                li.push(<li key={key.next()} ><Link to={"/houses/" + value.id}>{value.number} {value.street} {value.postCode}</Link></li>)
+                let item = <tr key={key.next()} >
+                    <th>{value.id}</th>
+                    <td>{value.number}</td>
+                    <td>{value.street}</td>
+                    <td>{value.postCode}</td>
+                    <td><Link to={"/houses/" + value.id}>edit</Link></td>
+                </tr>;
+
+                trs.push(item)
             });
         }
 
-        return <ul>
-            <li>Houses component</li>
-            {li}
-        </ul>;
+        return <div>
+            <h1 className="title">Houses</h1>
+            <h2 className="subtitle">Review the list of existing houses</h2>
+            <table className="table">
+                <thead>
+                <tr>
+                    <th title="Id">Id</th>
+                    <th><abbr title="Number">Nr.</abbr></th>
+                    <th title="Street">Street</th>
+                    <th title="Post code">PostCode</th>
+                    <th title="Action">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {trs}
+                </tbody>
+            </table>
+        </div>;
     }
 
 }
