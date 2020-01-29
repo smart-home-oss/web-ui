@@ -16,7 +16,7 @@ class Menu extends React.Component<EmptyProps> {
                 <nav className="level navbar" role="navigation" aria-label="main navigation">
                     <div className="level-right">
                         <div className="level-item">
-                            <label className={"margin-right-small is-5"}>
+                            <label className={"margin-left-small margin-right-small is-5"}>
                                 <strong>Smart Home OSS</strong>
                             </label>
 
