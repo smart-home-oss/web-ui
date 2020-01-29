@@ -7,7 +7,7 @@ import {httpHelper} from "../helpers/HttpHelper";
 import {SMART_HOME_HOST} from "./StoreConst";
 import Room from "../houses/Room";
 
-class HousesStore {
+class RoomsStore {
 
     rooms: Room[];
     indexed: Map<number, Room>;
@@ -15,9 +15,9 @@ class HousesStore {
 
     constructor() {
         extendObservable(this, {
-            houses: [],
-            indexedHouses: new Map<number, House>(),
-            currentHouse: {}
+            rooms: [],
+            indexed: new Map<number, House>(),
+            current: {}
         });
     }
 
@@ -34,7 +34,7 @@ class HousesStore {
                         this.indexed.set(i.id, i);
                     });
 
-                    this.houses = tmp;
+                    this.rooms = tmp;
 
                     observer.next(tmp);
                     observer.complete();
@@ -42,18 +42,18 @@ class HousesStore {
         });
     }
 
-    setCurrentHouse(id: number) {
+    setCurrentRoom(id: number) {
         this.current = this.indexed.get(id);
 
-        if(!this.current) {
-            this.load().subscribe();
-
-            httpHelper
-                .getJson(SMART_HOME_HOST, "api/v1/rooms", id)
-                .subscribe(data => this.current = Room.fromObject(data));
-        }
+        // if(!this.current) {
+        //     this.load().subscribe();
+        //
+        //     httpHelper
+        //         .getJson(SMART_HOME_HOST, "api/v1/rooms", id)
+        //         .subscribe(data => this.current = Room.fromObject(data));
+        // }
 
     }
 }
 
-export const housesStore = new HousesStore();
+export const roomsStore: RoomsStore = new RoomsStore();
