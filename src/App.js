@@ -6,8 +6,13 @@ import HousesComponent from "./app/houses/HousesComponent";
 import HouseDetailsComponent from "./app/houses/HouseDetailsComponent";
 import DevicesComponent from "./app/devices/DevicesComponent";
 import DeviceDetailsComponent from "./app/devices/DeviceDetailsComponent";
+import {infoStore} from "./app/store/InfoStore";
 
 class App extends React.Component {
+
+    componentDidMount(): void {
+        infoStore.loadInfos();
+    }
 
     render() {
         return (

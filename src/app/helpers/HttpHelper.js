@@ -3,15 +3,26 @@
 import {Observable} from "rxjs";
 import {Subscriber} from "rxjs";
 
+const APPLICATION_JSON = "application/json";
+const TEXT_PLAIN = "text/plain";
+
 class HttpHelper {
 
     timeout: number = 100;
+    useAuth: boolean = true;
 
-    // noinspection JSMethodCanBeStatic
-    _createDefaultRequest(url: string[], method: string, body: any = null): Request {
+    constructor(useAuth = true) {
+        this.useAuth = useAuth;
+    }
+
+// noinspection JSMethodCanBeStatic
+    _createDefaultRequest(url: string[], method: string, body: any = null, contentType: string = APPLICATION_JSON): Request {
         let h: Headers = new Headers();
-        h.append("Authorization", "Basic " + btoa("admin:password"));
-        h.append("Content-Type", "application/json");
+        if(this.useAuth) {
+            h.append("Authorization", "Basic " + btoa("admin:password"));
+        }
+
+        h.append("Content-Type", contentType);
 
         // RequestInit
         let request = { method: method,
@@ -31,10 +42,10 @@ class HttpHelper {
         }
 
         return new Request(urlToUse, request);
-    };
+    }
 
-    _createGetRequest(url: string[]): Request {
-        return this._createDefaultRequest(url, "get");
+    _createGetRequest(url: string[], contentType: string = APPLICATION_JSON): Request {
+        return this._createDefaultRequest(url, "get", null, contentType);
     }
 
     _createPostRequest(body, ...url: string[]): Request {
@@ -70,6 +81,11 @@ class HttpHelper {
         return this._json(this._createGetRequest(url))
     }
 
+    getText(...url: string | string []) {
+        return this._json(this._createGetRequest(url, TEXT_PLAIN))
+    }
+
 }
 
 export const httpHelper: HttpHelper = new HttpHelper();
+export const httpHelperNoAuth: HttpHelper = new HttpHelper(false);

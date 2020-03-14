@@ -2,11 +2,13 @@ import EmptyProps from "../helpers/EmptyProps";
 import * as React from "react";
 import {observer} from "mobx-react";
 import {Link} from "react-router-dom";
+import {infoStore} from "../store/InfoStore";
 
 class Menu extends React.Component<EmptyProps> {
 
 
     render() {
+
         return (
             <div>
 
@@ -23,6 +25,9 @@ class Menu extends React.Component<EmptyProps> {
                             <Link to={"/houses"} className="level-item navbar-item">Houses</Link>
                         </div>
                     </div>
+                    <div className={"level-left"}>
+                        <span>House Manager v.{infoStore.houseManagerVersion}</span>
+                    </div>
                 </nav>
             </div>
         );
@@ -32,4 +37,3 @@ class Menu extends React.Component<EmptyProps> {
 }
 
 export default observer(Menu)
-// export default Menu
