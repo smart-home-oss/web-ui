@@ -6,8 +6,17 @@ import {infoStore} from "../store/InfoStore";
 
 class Menu extends React.Component<EmptyProps> {
 
+    componentDidMount(): void {
+        infoStore.loadInfos();
+    }
 
     render() {
+
+        let version: string = "..";
+        if(infoStore.houseManagerVersion) {
+            version = infoStore.houseManagerVersion.status;
+        }
+        console.log("render menu " , new Date());
 
         return (
             <div>
@@ -26,7 +35,7 @@ class Menu extends React.Component<EmptyProps> {
                         </div>
                     </div>
                     <div className={"level-left"}>
-                        <span>House Manager v.{infoStore.houseManagerVersion}</span>
+                        <span>House Manager {version}</span>
                     </div>
                 </nav>
             </div>
