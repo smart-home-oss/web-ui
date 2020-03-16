@@ -1,23 +1,11 @@
 import EmptyProps from "../helpers/EmptyProps";
 import * as React from "react";
-import {observer} from "mobx-react";
 import {Link} from "react-router-dom";
-import {infoStore} from "../store/InfoStore";
+import Version from "./Version";
 
-class Menu extends React.Component<EmptyProps> {
-
-    componentDidMount(): void {
-        infoStore.loadInfos();
-    }
+export default class Menu extends React.Component<EmptyProps> {
 
     render() {
-
-        let version: string = "..";
-        if(infoStore.houseManagerVersion) {
-            version = infoStore.houseManagerVersion.status;
-        }
-        console.log("render menu " , new Date());
-
         return (
             <div>
 
@@ -35,7 +23,7 @@ class Menu extends React.Component<EmptyProps> {
                         </div>
                     </div>
                     <div className={"level-left"}>
-                        <span>House Manager {version}</span>
+                        <Version />
                     </div>
                 </nav>
             </div>
@@ -45,4 +33,4 @@ class Menu extends React.Component<EmptyProps> {
 
 }
 
-export default observer(Menu)
+// export default observer(Menu)

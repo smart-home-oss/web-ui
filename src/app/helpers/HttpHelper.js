@@ -56,7 +56,7 @@ class HttpHelper {
         return this._createDefaultRequest(url, "delete");
     }
 
-    _json(request) {
+    _doFetch(request) {
         return new Observable((observer: Subscriber) => {
             fetch(request)
                 .then((response) => {
@@ -71,18 +71,18 @@ class HttpHelper {
                     })
                 })
                 .catch((e) => {
-                    console.error(e.message, request.url);
+                    // console.error(e.message, request.url);
                     observer.error(e)
                 });
         });
     }
 
     getJson(...url: string | string []) {
-        return this._json(this._createGetRequest(url))
+        return this._doFetch(this._createGetRequest(url))
     }
 
     getText(...url: string | string []) {
-        return this._json(this._createGetRequest(url, TEXT_PLAIN))
+        return this._doFetch(this._createGetRequest(url, TEXT_PLAIN))
     }
 
 }
