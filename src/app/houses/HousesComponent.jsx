@@ -4,7 +4,7 @@ import {observer} from "mobx-react";
 import {housesStore} from "../store/HousesStore";
 import House from "./House";
 import KeyHelper from "../helpers/KeyHelper";
-import {Link} from "react-router-dom";
+import HouseItem from "./HouseItem";
 
 class HousesComponent extends React.Component<EmptyProps> {
 
@@ -14,41 +14,28 @@ class HousesComponent extends React.Component<EmptyProps> {
 
     render() {
 
-        let trs: [] = <li>No houses found</li>;
+        let items: [] = <li>No houses found</li>;
         let key = new KeyHelper();
 
         if (housesStore.houses) {
-            trs = [];
+            items = [];
             housesStore.houses.forEach((value: House) => {
-                let item = <tr key={key.next()} >
-                    <th>{value.id}</th>
-                    <td>{value.number}</td>
-                    <td>{value.street}</td>
-                    <td>{value.postCode}</td>
-                    <td><Link to={"/houses/" + value.id}>edit</Link></td>
-                </tr>;
+                let item = <div key={key.next()} className={"column is-quarter"}>
+                    <HouseItem house={value} />
+                </div>;
 
-                trs.push(item)
+                items.push(item)
             });
         }
 
         return <div>
             <h1 className="title">Houses</h1>
             <h2 className="subtitle">Review the list of existing houses</h2>
-            <table className="table">
-                <thead>
-                <tr>
-                    <th title="Id">Id</th>
-                    <th><abbr title="Number">Nr.</abbr></th>
-                    <th title="Street">Street</th>
-                    <th title="Post code">PostCode</th>
-                    <th title="Action">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {trs}
-                </tbody>
-            </table>
+            <div className="container is-fullhd">
+                <div className="columns is-multiline">
+                    {items}
+                </div>
+            </div>
         </div>;
     }
 
