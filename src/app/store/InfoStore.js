@@ -6,6 +6,7 @@ import {httpHelperNoAuth} from "../helpers/HttpHelper";
 import {AppInfo} from "./AppInfo";
 
 class InfoStore {
+    timeoutIdx;
 
     houseManager: AppInfo;
     userManager: AppInfo;
@@ -26,6 +27,18 @@ class InfoStore {
     }
 
     loadInfos() {
+        if(this.timeoutIdx) {
+            return
+        }
+
+        this.timeoutIdx = setTimeout(() => {
+            this.__doLoading();
+        }, 10 * 1000);
+
+        this.__doLoading();
+    }
+
+    __doLoading() {
         this.loadInfo(HOUSE_MANAGER, i => this.houseManager = i);
         this.loadInfo(USER_MANAGER, i => this.userManager = i);
         this.loadInfo(OAUTH2_BRIDGE, i => this.oauth2Bridge = i);
