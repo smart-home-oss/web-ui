@@ -4,7 +4,7 @@ import {extendObservable} from "mobx";
 import {Observable, Subscriber} from "rxjs";
 import House from "../houses/House";
 import {httpHelper} from "../helpers/HttpHelper";
-import {HOUSE_MANAGER_HOST} from "./StoreConst";
+import {HOUSE_MANAGER} from "./ApiResource";
 import Room from "../houses/Room";
 
 class RoomsStore {
@@ -26,7 +26,7 @@ class RoomsStore {
             let tmp: [] = [];
 
             httpHelper
-                .getJson(HOUSE_MANAGER_HOST, "api/v1/rooms?houseId=" + id + "&size=" + 999)
+                .getJson(HOUSE_MANAGER.host, "api/v1/rooms?houseId=" + id + "&size=" + 999)
                 .subscribe(data => {
                     data.forEach((value: Room) => {
                         let i: Room = Room.fromObject(value);
@@ -49,7 +49,7 @@ class RoomsStore {
         //     this.load().subscribe();
         //
         //     httpHelper
-        //         .getJson(HOUSE_MANAGER_HOST, "api/v1/rooms", id)
+        //         .getJson(HOUSE_MANAGER.host, "api/v1/rooms", id)
         //         .subscribe(data => this.current = Room.fromObject(data));
         // }
 

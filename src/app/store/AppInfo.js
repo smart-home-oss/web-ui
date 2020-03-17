@@ -1,17 +1,19 @@
 import {AppJavaInfo} from "./AppJavaInfo";
+import ApiResource from "./ApiResource";
 
 export class AppInfo {
     state: "LOADING"|"OK"|"ERROR" = "LOADING";
     message: string;
-    url: string;
+    resource: ApiResource = new ApiResource();
     name: string = "";
     version: string = "";
     encoding: string;
     java: AppJavaInfo = new AppJavaInfo();
 
-    static fromError(error: any, url: string) {
+    static fromError(error: any, apiResource: ApiResource) {
         let result: AppInfo = new AppInfo();
-        result.url = url;
+        result.resource = apiResource;
+        result.name = apiResource.name;
 
         if(error) {
             result.state = "ERROR";
@@ -21,9 +23,9 @@ export class AppInfo {
         return result;
     }
 
-    static fromValue(data: any, url: string) {
+    static fromValue(data: any, apiResource: ApiResource) {
         let result: AppInfo = new AppInfo();
-        result.url = url;
+        result.resource = apiResource;
 
         if(data) {
             result.state = "OK";

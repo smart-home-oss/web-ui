@@ -16,7 +16,7 @@ class Version extends React.Component<EmptyProps> {
         return <VersionItem key={key.next()}
                             ok={appInfo.state==="OK"}
                             message={appInfo.message}
-                            url={appInfo.url}
+                            url={appInfo.resource.getInfoUrl()}
                             name={appInfo.name}
                             version={appInfo.version}/>
     }
@@ -29,13 +29,13 @@ class Version extends React.Component<EmptyProps> {
     render() {
         let key = new KeyHelper();
         let items = [];
-        items.push(this.version(infoStore.houseManagerVersion, key));
+        items.push(this.version(infoStore.houseManager, key));
         items.push(this.hr(key));
-        items.push(this.version(infoStore.userManagerVersion, key));
+        items.push(this.version(infoStore.userManager, key));
         items.push(this.hr(key));
-        items.push(this.version(infoStore.oauth2BridgeVersion, key));
+        items.push(this.version(infoStore.oauth2Bridge, key));
         items.push(this.hr(key));
-        items.push(this.version(infoStore.externalSensorsVersion, key));
+        items.push(this.version(infoStore.externalSensors, key));
 
         let failedMsg = "";
         if(infoStore.hasFailed) {

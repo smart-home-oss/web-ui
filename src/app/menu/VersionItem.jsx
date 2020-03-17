@@ -32,6 +32,7 @@ export default class VersionItem extends React.Component<VersionItemProps> {
 
         return <div className="dropdown-item is-danger">
             <p><strong className={"tag is-danger is-light"}>Error</strong></p>
+            <p><strong>{this.props.name}</strong></p>
             <p>{this.props.message}</p>
             {this.link()}
         </div>
