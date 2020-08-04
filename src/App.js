@@ -6,6 +6,7 @@ import HousesComponent from "./app/houses/HousesComponent";
 import HouseDetailsComponent from "./app/houses/HouseDetailsComponent";
 import DevicesComponent from "./app/devices/DevicesComponent";
 import DeviceDetailsComponent from "./app/devices/DeviceDetailsComponent";
+import { Button } from 'antd';
 
 class App extends React.Component {
 
