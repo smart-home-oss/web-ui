@@ -12,14 +12,14 @@ class App extends React.Component {
     render() {
         return (
             <div className="container">
-                <Route component={Menu}/>
+                {/*<Route component={Menu}/>*/}
 
-                <div className="notification">
-                    <Route exact path='/houses' component={HousesComponent} />
-                    <Route exact path='/houses/:houseId' component={HouseDetailsComponent} />
-                    <Route exact path='/devices' component={DevicesComponent} />
-                    <Route exact path='/devices/:houseId' component={DeviceDetailsComponent} />
-                </div>
+                {/*<div className="notification">*/}
+                {/*    <Route exact path='/houses' component={HousesComponent} />*/}
+                {/*    <Route exact path='/houses/:houseId' component={HouseDetailsComponent} />*/}
+                {/*    <Route exact path='/devices' component={DevicesComponent} />*/}
+                {/*    <Route exact path='/devices/:houseId' component={DeviceDetailsComponent} />*/}
+                {/*</div>*/}
             </div>
         );
     }
