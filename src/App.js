@@ -1,18 +1,18 @@
 import React from 'react';
 import './App.scss';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import {Layout} from 'antd';
 import {Footer} from "./app/shared/Footer";
 import {Header} from "./app/shared/Header";
-
-const { Content } = Layout;
+import {Content} from "./app/shared/Content";
 
 class App extends React.Component {
 
     render() {
         return (
-            <Layout className="layout">
-                <Header />
-                <Footer />
+            <Layout>
+                <Header/>
+                <Content/>
+                <Footer/>
             </Layout>
         );
     }
