@@ -4,6 +4,7 @@ import './Content.css'
 import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "../store/ApiResource";
 import House from "../houses/House";
+import KeyHelper from "../helpers/KeyHelper";
 
 export class Content extends React.Component {
     loadingState : "houses_loaded" | "error" | "no_houses"| "loading" = "loading";
@@ -23,7 +24,7 @@ export class Content extends React.Component {
             .subscribe(
                 data => {
                     let tmp : House[] = [];
-                    data.forEach((value: House) => {
+                    data.forEach(value => {
                         let house = House.fromObject(value);
                         tmp.push(house);
                     });
@@ -57,7 +58,14 @@ export class Content extends React.Component {
                 content = <h2>ERROR</h2>
                 break
             case "houses_loaded":
-                content = <div>TODO houses loaded, need to render them</div>
+                let tmp = [];
+                let key = new KeyHelper();
+
+                this.houses.forEach(house => {
+                    tmp.push(<li key={key.next()}>{house.id} - {house.name}</li>)
+                })
+
+                content = <ul>{tmp}</ul>
                 break
             case "no_houses":
                 content = <div>TODO no houses, show add new house</div>
