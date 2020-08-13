@@ -7,6 +7,11 @@ import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "./ApiResource";
 import {roomsStore} from "./RoomsStore";
 
+const HOUSES_LOADED : string = "houses_loaded"
+const ERROR : string = "error"
+const NO_HOUSES : string = "no_houses"
+const LOADING : string = "loading";
+
 class HousesStore {
 
     houses: House[];
