@@ -9,7 +9,7 @@ import HouseItem from "./HouseItem";
 class HousesComponent extends React.Component<EmptyProps> {
 
     componentDidMount(): void {
-        housesStore.loadHouses().subscribe();
+        housesStore.loadHouses();
     }
 
     render() {

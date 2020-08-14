@@ -1,7 +1,7 @@
 // @flow
 
 import {extendObservable} from "mobx";
-import {Observable, Subscriber} from "rxjs";
+import {Observable, ReplaySubject, Subscriber} from "rxjs";
 import House from "../houses/House";
 import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "./ApiResource";
@@ -20,6 +20,9 @@ class HousesStore {
     current: House;
     state: string;
 
+    currentObservable : Observable = new Observable();
+    currentReplaySubject : ReplaySubject;
+
     constructor() {
         extendObservable(this, {
             houses: [],
@@ -29,9 +32,9 @@ class HousesStore {
         });
     }
 
-    loadHouses(): Observable {
+    loadHouses(): ReplaySubject {
         if(this.state === LOADING) {
-            return this.currentObservable;
+            return this.currentReplaySubject;
         }
 
         this.state = LOADING;
@@ -64,7 +67,11 @@ class HousesStore {
                     });
         });
 
-        return this.currentObservable;
+        this.currentReplaySubject = new ReplaySubject(1);
+
+        this.currentObservable.subscribe(this.currentReplaySubject);
+
+        return this.currentReplaySubject;
     }
 
     setCurrentHouse(id: number) {
