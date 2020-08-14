@@ -7,50 +7,70 @@ import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "./ApiResource";
 import {roomsStore} from "./RoomsStore";
 
-const HOUSES_LOADED : string = "houses_loaded"
-const ERROR : string = "error"
-const NO_HOUSES : string = "no_houses"
-const LOADING : string = "loading";
+export const HOUSES_LOADED: string = "houses_loaded"
+export const ERROR: string = "error"
+export const NO_HOUSES: string = "no_houses"
+export const LOADING: string = "loading";
+export const PENDING: string = "pending";
 
 class HousesStore {
 
     houses: House[];
     indexed: Map<number, House>;
     current: House;
+    state: string;
 
     constructor() {
         extendObservable(this, {
             houses: [],
             indexed: new Map<number, House>(),
-            current: {}
+            current: {},
+            state: PENDING
         });
     }
 
     loadHouses(): Observable {
-        return new Observable((observer: Subscriber) => {
+        if(this.state === LOADING) {
+            return this.currentObservable;
+        }
+
+        this.state = LOADING;
+
+        this.currentObservable = new Observable((observer: Subscriber) => {
             let tmp: [] = [];
 
             httpHelper
                 .getJson(HOUSE_MANAGER.host, "api/v1/houses")
                 .subscribe(data => {
-                    data.forEach((value: House) => {
-                        let house = House.fromObject(value);
-                        tmp.push(house);
-                        this.indexed.set(house.id, house);
+                        data.forEach((value: House) => {
+                            let house = House.fromObject(value);
+                            tmp.push(house);
+                            this.indexed.set(house.id, house);
+                        });
+
+                        this.houses = tmp;
+                        if (this.houses.length > 0) {
+                            this.state = HOUSES_LOADED;
+                        } else {
+                            this.state = NO_HOUSES;
+                        }
+
+                        observer.next(tmp);
+                        observer.complete();
+                    },
+                    e => {
+                        this.state = ERROR;
+                        observer.error(e);
                     });
-
-                    this.houses = tmp;
-
-                    observer.next(tmp);
-                    observer.complete();
-                });
         });
+
+        return this.currentObservable;
     }
 
     setCurrentHouse(id: number) {
         this.current = this.indexed.get(id);
 
-        if(!this.current) {
+        if (!this.current) {
             this.loadHouses().subscribe();
 
             httpHelper

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from "react-router-dom";
+import {Route, Redirect} from "react-router-dom";
 
 import './App.scss';
 import {Layout} from 'antd';
@@ -17,7 +17,10 @@ class App extends React.Component {
             <Layout>
                 <Header/>
                 <Layout.Content>
-                    <Route exact path='/onboarding' component={OnboardingComponent} />
+                    <Route exact path="/">
+                        <Redirect to="/houses" />
+                    </Route>
+
                     <Route exact path='/houses' component={HousesComponent} />
                     <Route exact path='/houses/:houseId' component={HouseDetailsComponent} />
                     <Route exact path='/devices' component={DevicesComponent} />
