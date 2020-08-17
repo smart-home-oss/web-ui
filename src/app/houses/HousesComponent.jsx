@@ -5,6 +5,7 @@ import {ERROR, HOUSES_LOADED, housesStore, LOADING} from "../store/HousesStore";
 import House from "./House";
 import KeyHelper from "../helpers/KeyHelper";
 import HouseItem from "./HouseItem";
+import { Col, Row } from 'antd';
 
 class HousesComponent extends React.Component<EmptyProps> {
 
@@ -14,34 +15,49 @@ class HousesComponent extends React.Component<EmptyProps> {
 
     render() {
 
-        let items: [] = <li>No houses found</li>;
+        let rows: [] = <li>No houses found</li>;
         let key = new KeyHelper();
 
         switch (housesStore.state) {
             case HOUSES_LOADED:
-                items = [];
+                rows = [];
+                let columns = [];
                 housesStore.houses.forEach((value: House) => {
-                    let item = <div key={key.next()} className={"column is-quarter"}>
-                        <HouseItem house={value}/>
-                    </div>;
+                    let column = <Col key={key.next()} span={8}>
+                            <HouseItem house={value}/>
+                        </Col>;
+                    columns.push(column)
 
-                    items.push(item)
+                    if(columns.length === 3) {
+                        let row = <Row gutter={10} style={{marginTop: 10}}>
+                            {columns}
+                        </Row>;
+                        rows.push(row)
+
+                        columns = [];
+                    }
                 });
+                // TODO, make it better, this if should be part of the forEach
+                if(columns.length > 0) {
+                    let row = <Row gutter={10} style={{marginTop: 10}}>
+                        {columns}
+                    </Row>;
+                    rows.push(row)
+                }
+
                 break;
             case LOADING:
-                items = <li>Loading...</li>;
+                rows = <li>Loading...</li>;
                 break;
             case ERROR:
-                items = <li>Error</li>;
+                rows = <li>Error</li>;
                 break;
         }
 
         return <div>
-            <h1 className="title">Houses</h1>
-            <div className="container is-fullhd">
-                <div className="columns is-multiline">
-                    {items}
-                </div>
+            <h1>Houses</h1>
+            <div className="site-card-wrapper">
+                {rows}
             </div>
         </div>;
     }
