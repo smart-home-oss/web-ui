@@ -2,6 +2,8 @@
 
 @import '~antd/dist/antd.css';
 
+@import '~antd/dist/antd.dark.css';
+
 .logo {
   width: 120px;
   height: 31px;
@@ -16,4 +18,14 @@
 
 .margin-left-small {
   margin-left: 10px;
+}
+
+.site-layout-content {
+  padding: 24px;
+  min-height: 280px;
+}
+
+.house-item {
+  margin: 10px;
+  cursor: pointer;
 }

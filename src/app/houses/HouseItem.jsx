@@ -1,36 +1,27 @@
 import * as React from "react";
 import House from "./House";
-import {Link} from "react-router-dom";
-import { Card, Avatar } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import {Avatar, Card, Col} from 'antd';
+import {PicsumImage} from "../shared/PicsumImage";
 
-const { Meta } = Card;
-type HouseProps = {
-    house: House
+const {Meta} = Card;
+
+type Props = {
+    house: House,
+    key? : string,
+    userId? : string,
 }
-export default class HouseItem extends React.Component<HouseProps> {
 
-    render() {
-        return <Card
-                style={{ width: 250 }}
-                cover={
-                    <img
-                        alt="example"
-                        src={"https://picsum.photos/seed/" + this.props.house.id + "1/250/110"}
-                    />
-                }
-                actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                ]}
-            >
-                <Meta
-                    avatar={<Avatar src={"https://picsum.photos/seed/" + this.props.house.id + "1/96/96"} />}
-                    title={this.props.house.id}
-                    description={this.props.house.name}
-                />
-            </Card>;
-    }
+export default function HouseItem(props: Props) {
 
+    return <Col key={props.key || "house-item"} xs={12} sm={12} md={8} lg={8} xl={6}>
+        <Card
+            className={"house-item"}
+            cover={<PicsumImage value={props.house.id}/>}>
+            <Meta
+                avatar={<Avatar src={"https://picsum.photos/seed/" + (props.userId || 42) + "1/96/96"}/>}
+                title={props.house.id}
+                description={props.house.name}
+            />
+        </Card>
+    </Col>
 }
