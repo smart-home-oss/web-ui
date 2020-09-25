@@ -8,13 +8,12 @@ const {Meta} = Card;
 
 type Props = {
     house: House,
-    key? : string,
     userId? : string,
 }
 
 export default function HouseItem(props: Props) {
 
-    return <Col key={props.key || "house-item"} xs={12} sm={12} md={8} lg={8} xl={6}>
+    return <Col xs={12} sm={12} md={8} lg={8} xl={6}>
         <Link to={"/houses/" + props.house.id}>
             <Card
                 className={"house-item"}

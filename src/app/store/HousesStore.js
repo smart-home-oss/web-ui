@@ -40,6 +40,9 @@ class HousesStore extends GenericStore {
             })
     }
 
+    putHouse(h: House) {
+        this.indexed.set(h.id, h);
+    }
 
     isEmpty(): boolean {
         return this.houses.length < 1;

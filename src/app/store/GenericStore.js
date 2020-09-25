@@ -15,7 +15,7 @@ export const SERVER_ERROR: string = "ServerError"
 
 export default class GenericStore {
 
-    state: PENDING | LOADING | LOADED | EMPTY | ERROR
+    state: PENDING | LOADING | LOADED | EMPTY | ERROR = PENDING
     errorType: NETWORK_ERROR | SERVER_ERROR
     errorMessage: string
     api: ApiResource
@@ -34,7 +34,7 @@ export default class GenericStore {
 
         this.state = LOADING;
 
-        this.currentObservable = new Observable((observer: Subscriber) => {
+        this.observable = new Observable((observer: Subscriber) => {
             httpHelper
                 .getJson(this.api.host, uri)
                 .subscribe(data => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Redirect} from "react-router-dom";
+import {Redirect, Route} from "react-router-dom";
 
 import './App.scss';
 import {Layout} from 'antd';
@@ -9,7 +9,6 @@ import HousesComponent from "./app/houses/HousesComponent";
 import HouseDetailsComponent from "./app/houses/HouseDetailsComponent";
 import DevicesComponent from "./app/devices/DevicesComponent";
 import DeviceDetailsComponent from "./app/devices/DeviceDetailsComponent";
-import {Breadcrumb} from "./app/shared/Breadcrumb";
 
 class App extends React.Component {
 

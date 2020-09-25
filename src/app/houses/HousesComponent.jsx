@@ -2,7 +2,6 @@ import * as React from "react";
 import EmptyProps from "../helpers/EmptyProps";
 import {observer} from "mobx-react";
 import {housesStore} from "../store/HousesStore";
-import House from "./House";
 import KeyHelper from "../helpers/KeyHelper";
 import HouseItem from "./HouseItem";
 import {Row} from 'antd';
@@ -20,7 +19,7 @@ class HousesComponent extends React.Component<EmptyProps> {
         switch (housesStore.state) {
             case LOADED:
                 let key = new KeyHelper();
-                let items = housesStore.houses.map((value: House) => <HouseItem key={key.next()} house={value}/>);
+                let items = housesStore.houses.map(h => <HouseItem key={key.next()} house={h}/>);
                 items = (items.length < 1) ? <ErrorResult status={"NEW"}/> : items;
 
                 return <Row>{items}</Row>;
