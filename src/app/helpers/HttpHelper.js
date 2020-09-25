@@ -1,6 +1,6 @@
 // @flow
 
-import {Observable} from "rxjs";
+import {Observable, ReplaySubject} from "rxjs";
 import {Subscriber} from "rxjs";
 
 const APPLICATION_JSON = "application/json";
@@ -16,7 +16,7 @@ class HttpHelper {
     }
 
 // noinspection JSMethodCanBeStatic
-    _createDefaultRequest(url: string[], method: string, body: any = null, contentType: string = APPLICATION_JSON): Request {
+    _createDefaultRequest(urlParts: string[], method: string, body: any = null, contentType: string = APPLICATION_JSON): Request {
         let h: Headers = new Headers();
         if(this.useAuth) {
             h.append("Authorization", "Basic " + btoa("admin:password"));
@@ -25,50 +25,52 @@ class HttpHelper {
         h.append("Content-Type", contentType);
 
         // RequestInit
-        let request = { method: method,
+        let options = {
+            method: method,
             headers: h,
             mode: 'cors',
             cache: 'default',
+            contentType: contentType,
         };
 
         if(body) {
-            request.body = JSON.stringify(body);
+            options.body = JSON.stringify(body);
         }
 
-        let urlToUse: string = url;
+        let url: string;
 
-        if(Array.isArray(url)) {
-            urlToUse = url.join("/");
+        if(Array.isArray(urlParts)) {
+            url = urlParts.join("/");
+        } else {
+            url = urlParts
         }
 
-        return new Request(urlToUse, request);
+        return new Request(url, options);
     }
 
     _createGetRequest(url: string[], contentType: string = APPLICATION_JSON): Request {
-        return this._createDefaultRequest(url, "get", null, contentType);
+        return this._createDefaultRequest(url, "GET", null, contentType);
     }
 
-    _createPostRequest(body, ...url: string[]): Request {
-        return this._createDefaultRequest(url, "post", body);
+    _createPostRequest(body, url: string[]): Request {
+        return this._createDefaultRequest(url, "POST", body);
     }
 
-    _createDeleteRequest(...url: string[]): Request {
-        return this._createDefaultRequest(url, "delete");
+    _createDeleteRequest(url: string[]): Request {
+        return this._createDefaultRequest(url, "DELETE", null, TEXT_PLAIN);
     }
 
     _doFetch(request) {
         return new Observable((observer: Subscriber) => {
             fetch(request)
                 .then((response) => {
-                    response.json().then((data) => {
-                        if (response.ok) {
-                            observer.next(data);
-                            observer.complete();
-                        } else {
-                            console.error(data, response.status, request.url);
-                            observer.error(data)
-                        }
-                    })
+                    if(request.headers.get("Content-Type") === APPLICATION_JSON) {
+                        response.json().then((data) => {
+                            this._handleResponse(request, response, observer, data)
+                        })
+                    } else {
+                        this._handleResponse(request, response, observer, response.body)
+                    }
                 })
                 .catch((e) => {
                     // console.error(e.message, request.url);
@@ -77,8 +79,27 @@ class HttpHelper {
         });
     }
 
+    _handleResponse(request, response, observer, value) {
+        if (response.ok) {
+            observer.next(value);
+            observer.complete();
+        } else {
+            console.error(value, response.status, request.url);
+            observer.error(value)
+        }
+    }
+
     getJson(...url: string | string []) {
         return this._doFetch(this._createGetRequest(url))
+    }
+
+    delete(...url: string | string []) {
+        let observable = this._doFetch(this._createDeleteRequest(url))
+
+        let replaySubject = new ReplaySubject(1)
+        observable.subscribe(replaySubject)
+
+        return replaySubject
     }
 
     getText(...url: string | string []) {
