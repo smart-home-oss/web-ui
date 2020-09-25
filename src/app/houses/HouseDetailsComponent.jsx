@@ -8,20 +8,33 @@ import {Row} from "antd";
 import HouseLine from "./HouseLine";
 import {currentHouseStore} from "../store/CurrentHouseStore";
 import {LOADED} from "../store/GenericStore";
+import {houseService} from "./HouseService";
 
 class HouseDetailsComponent extends React.Component<EmptyProps> {
 
     componentDidMount(): void {
-        currentHouseStore.loadHouse(parseInt(this.props.match.params.houseId));
+        currentHouseStore.loadHouse(parseInt(this.props.match.params.houseId))
+    }
+
+    onHouseDelete(id: number) {
+        houseService
+            .delete(id)
+            .subscribe(
+                () => {
+                    window.history.back()
+                },
+                e => {
+                    alert(e.message)
+                    console.error(e)
+                })
     }
 
     render() {
-        let houseInfo;
-        let roomsForm;
+        let houseInfo, roomsForm
 
         if (currentHouseStore.state === LOADED) {
             houseInfo = currentHouseStore.current ?
-                <HouseLine house={currentHouseStore.current}/>
+                <HouseLine house={currentHouseStore.current} onDelete={(id) => this.onHouseDelete(id)}/>
                 :
                 <ErrorResult status={"404"} message={"We could not find this house"}/>;
         }

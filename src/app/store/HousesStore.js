@@ -47,6 +47,11 @@ class HousesStore extends GenericStore {
     isEmpty(): boolean {
         return this.houses.length < 1;
     }
+
+    delete(id: number) {
+        this.indexed.delete(id)
+        this.houses = this.houses.filter(h => h.id !== id)
+    }
 }
 
 export const housesStore: HousesStore = new HousesStore();

@@ -1,18 +1,31 @@
 import * as React from "react";
 import House from "./House";
-import {Avatar, Col} from 'antd';
+import {Button, Col, PageHeader} from 'antd';
+import {DeleteOutlined,} from '@ant-design/icons';
 
 type Props = {
     house: House,
-    key? : string,
-    userId? : string,
+    key?: string,
+    userId?: string,
+    onDelete: (id : number) => {}
 }
 
 export default function HouseLine(props: Props) {
 
     return <Col key={props.key || "house-item"} xs={24}>
-        <Avatar src={"https://picsum.photos/seed/" + (props.userId || 42) + "1/96/96"}/>
-        <label> {props.house.id} </label>
-        <label> {props.house.name}</label>
+        <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title={props.house.name}
+            subTitle={"ID: " + props.house.id}
+            extra={[
+                <Button key="1" type="danger" icon={<DeleteOutlined/>}
+                        onClick={() => props.onDelete(props.house.id)}>
+                    Delete
+                </Button>,
+            ]}
+        >
+        </PageHeader>
+
     </Col>
 }
