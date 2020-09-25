@@ -1,51 +1,43 @@
 import * as React from "react";
 import EmptyProps from "../helpers/EmptyProps";
 import {observer} from "mobx-react";
-import {housesStore} from "../store/HousesStore";
-import HouseForm from "./HouseForm";
 import {roomsStore} from "../store/RoomsStore";
 import RoomsForm from "./RoomsForm";
+import {ErrorResult} from "../shared/ErrorResult";
+import {Row} from "antd";
+import HouseLine from "./HouseLine";
+import {currentHouseStore} from "../store/CurrentHouseStore";
+import {LOADED} from "../store/GenericStore";
 
 class HouseDetailsComponent extends React.Component<EmptyProps> {
 
     componentDidMount(): void {
-        housesStore.setCurrentHouse(parseInt(this.props.match.params.houseId));
+        currentHouseStore.loadHouse(parseInt(this.props.match.params.houseId));
     }
 
     render() {
-        let houseForm;
+        let houseInfo;
         let roomsForm;
 
-        if (housesStore.current) {
-            const h = housesStore.current;
-            houseForm = <HouseForm house={h} onChange={(event) => {
-                console.log("on house form - on change, ", event)
-            }}/>;
-
-        } else {
-            houseForm = "House not found...";
+        if (currentHouseStore.state === LOADED) {
+            houseInfo = currentHouseStore.current ?
+                <HouseLine house={currentHouseStore.current}/>
+                :
+                <ErrorResult status={"404"} message={"We could not find this house"}/>;
         }
 
-        if (roomsStore.current) {
-            roomsForm = <RoomsForm current={roomsStore.current}
-                                   rooms={roomsStore.rooms} />
-        } else {
-            roomsForm = "No house = No rooms!";
-        }
+        roomsForm = roomsStore.current ?
+            <RoomsForm current={roomsStore.current} rooms={roomsStore.rooms}/>
+            :
+            "No house = No rooms!"
 
         return <div>
-            <div className="columns is-desktop">
-                <div className="column">
-                    <h3 className="title">House details</h3>
-                    {houseForm}
-                </div>
-                <div className="column">
-                    <h3 className="title">Rooms</h3>
-                    {roomsForm}
-                </div>
-            </div>
-
-
+            <Row>
+                {houseInfo}
+            </Row>
+            <Row>
+                {roomsForm}
+            </Row>
         </div>
     }
 

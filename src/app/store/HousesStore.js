@@ -1,103 +1,48 @@
 // @flow
 
 import {extendObservable} from "mobx";
-import {Observable, ReplaySubject, Subscriber} from "rxjs";
+import {ReplaySubject} from "rxjs";
 import House from "../houses/House";
-import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "./ApiResource";
-import {roomsStore} from "./RoomsStore";
+import GenericStore, {PENDING} from "./GenericStore";
 
-export const HOUSES_LOADED: string = "houses_loaded"
-export const ERROR: string = "error"
-export const NETWORK_ERROR: string = "NetworkError"
-export const SERVER_ERROR: string = "ServerError"
-export const NO_HOUSES: string = "no_houses"
-export const LOADING: string = "loading";
-export const PENDING: string = "pending";
-
-class HousesStore {
+class HousesStore extends GenericStore {
 
     houses: House[];
     indexed: Map<number, House>;
-    current: House;
-    state: string;
-    errorType: NETWORK_ERROR | SERVER_ERROR;
-    errorMessage: string;
-
-    currentObservable : Observable = new Observable();
-    currentReplaySubject : ReplaySubject;
 
     constructor() {
+        super(HOUSE_MANAGER)
+
         extendObservable(this, {
             houses: [],
             indexed: new Map<number, House>(),
-            current: {},
             state: PENDING
         });
     }
 
-    loadHouses(): ReplaySubject {
-        if(this.state === LOADING) {
-            return this.currentReplaySubject;
-        }
-
-        this.state = LOADING;
-
-        this.currentObservable = new Observable((observer: Subscriber) => {
-            let tmp: [] = [];
-
-            httpHelper
-                .getJson(HOUSE_MANAGER.host, "api/v1/houses")
-                .subscribe(data => {
-                        data.forEach((value: House) => {
-                            let house = House.fromObject(value);
-                            tmp.push(house);
-                            this.indexed.set(house.id, house);
-                        });
-
-                        this.houses = tmp;
-                        if (this.houses.length > 0) {
-                            this.state = HOUSES_LOADED;
-                        } else {
-                            this.state = NO_HOUSES;
-                        }
-
-                        observer.next(tmp);
-                        observer.complete();
-                    },
-                    e => {
-                        this.state = ERROR;
-                        this.errorType = e.message.startsWith("NetworkError") ? NETWORK_ERROR : SERVER_ERROR;
-                        this.errorMessage = e.message;
-                        console.error(e.message)
-                        observer.error(e);
-                    });
-        });
-
-        this.currentReplaySubject = new ReplaySubject(1);
-
-        this.currentObservable.subscribe(this.currentReplaySubject);
-
-        return this.currentReplaySubject;
+    getIndexed(id: number) {
+        return this.indexed.get(id);
     }
 
-    setCurrentHouse(id: number) {
-        this.current = this.indexed.get(id);
+    loadHouses(): ReplaySubject {
+        this.load(
+            "api/v1/houses",
+            data => {
+                this.houses = []
+                this.indexed.clear();
 
-        if (!this.current) {
-            this.loadHouses().subscribe();
-
-            httpHelper
-                .getJson(HOUSE_MANAGER.host, "api/v1/houses", id)
-                .subscribe(data => {
-                    let house: House = House.fromObject(data);
+                data.forEach((value: House) => {
+                    let house = House.fromObject(value);
+                    this.houses.push(house);
                     this.indexed.set(house.id, house);
-                    this.setCurrentHouse(house.id);
                 });
-        } else {
-            roomsStore.loadByHouseId(this.current.id).subscribe();
-        }
+            })
+    }
 
+
+    isEmpty(): boolean {
+        return this.houses.length < 1;
     }
 }
 
