@@ -26,7 +26,7 @@ class HousesComponent extends React.Component<EmptyProps> {
             case LOADING:
                 return <CardSkeleton/>;
             case ERROR:
-                return <ErrorResult/>;
+                return <ErrorResult status={"warning"} message={housesStore.errorMessage} />;
             default :
                 return <div>Just a nyan cat running..</div>;
         }

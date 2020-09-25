@@ -9,6 +9,8 @@ import {roomsStore} from "./RoomsStore";
 
 export const HOUSES_LOADED: string = "houses_loaded"
 export const ERROR: string = "error"
+export const NETWORK_ERROR: string = "NetworkError"
+export const SERVER_ERROR: string = "ServerError"
 export const NO_HOUSES: string = "no_houses"
 export const LOADING: string = "loading";
 export const PENDING: string = "pending";
@@ -19,6 +21,8 @@ class HousesStore {
     indexed: Map<number, House>;
     current: House;
     state: string;
+    errorType: NETWORK_ERROR | SERVER_ERROR;
+    errorMessage: string;
 
     currentObservable : Observable = new Observable();
     currentReplaySubject : ReplaySubject;
@@ -63,6 +67,9 @@ class HousesStore {
                     },
                     e => {
                         this.state = ERROR;
+                        this.errorType = e.message.startsWith("NetworkError") ? NETWORK_ERROR : SERVER_ERROR;
+                        this.errorMessage = e.message;
+                        console.error(e.message)
                         observer.error(e);
                     });
         });

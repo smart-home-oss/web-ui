@@ -1,10 +1,14 @@
 import React from 'react'
 import {Layout, Menu} from 'antd';
+import {Link} from "react-router-dom";
 
-export class Header extends React.Component{
+export class Header extends React.Component {
     render() {
         return <Layout.Header>
-            <div className="logo" />
+            <Link to={{pathname: "/"}}>
+                <h1 className="logo">Smart House OSS</h1>
+            </Link>
+
             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['houses']}>
                 <Menu.Item key="houses">Houses</Menu.Item>
             </Menu>

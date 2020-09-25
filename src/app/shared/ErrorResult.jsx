@@ -2,11 +2,12 @@ import React from 'react'
 import {Button, Result} from 'antd';
 
 type ErrorProps = {
-    status?: "NEW" |"500" | "403" | "404"
+    status?: "NEW" |"500" | "403" | "404" | "warning",
+    message?: string,
 }
 export function ErrorResult (props : ErrorProps) {
-    let extra = {}
-    let subTitle = "Something bad happened."
+    let extra = <span/>
+    let subTitle = props.message ? props.message : "Something bad happened."
     let status = props.status || "500";
     if(props.status === "NEW") {
         extra = <Button type="primary" key="console">

@@ -18,7 +18,7 @@ class App extends React.Component {
             <Layout className="layout">
                 <Header/>
                 <Layout.Content style={{ padding: '0 50px' }}>
-                    <Breadcrumb />
+                    {/*<Breadcrumb />*/}
 
                     <div className="site-layout-content">
                         <Route exact path="/">
