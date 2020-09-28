@@ -19,11 +19,16 @@
 }
 
 .site-layout-content {
-  padding: 24px;
+  padding: 0 24px;
   min-height: 280px;
+  border-radius: 0 20px 20px 0;
 }
 
 .house-item {
   margin: 10px;
   cursor: pointer;
+}
+
+.new-house-form {
+  padding: 24px;
 }

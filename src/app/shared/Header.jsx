@@ -10,7 +10,12 @@ export class Header extends React.Component {
             </Link>
 
             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['houses']}>
-                <Menu.Item key="houses">Houses</Menu.Item>
+
+                <Menu.Item key="houses">
+                    <Link to={"/houses"}>
+                        Houses
+                    </Link>
+                </Menu.Item>
             </Menu>
         </Layout.Header>;
     }

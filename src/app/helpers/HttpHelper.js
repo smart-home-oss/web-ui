@@ -60,8 +60,8 @@ class HttpHelper {
         return this._createDefaultRequest(url, "DELETE", null, TEXT_PLAIN);
     }
 
-    _doFetch(request) {
-        return new Observable((observer: Subscriber) => {
+    _doFetch(request): ReplaySubject {
+        let observable = new Observable((observer: Subscriber) => {
             fetch(request)
                 .then((response) => {
                     if(request.headers.get("Content-Type") === APPLICATION_JSON) {
@@ -77,6 +77,11 @@ class HttpHelper {
                     observer.error(e)
                 });
         });
+
+        let replaySubject = new ReplaySubject(1)
+        observable.subscribe(replaySubject)
+
+        return replaySubject
     }
 
     _handleResponse(request, response, observer, value) {
@@ -89,17 +94,16 @@ class HttpHelper {
         }
     }
 
-    getJson(...url: string | string []) {
-        return this._doFetch(this._createGetRequest(url))
+    delete(...url: string | string []) {
+        return this._doFetch(this._createDeleteRequest(url))
     }
 
-    delete(...url: string | string []) {
-        let observable = this._doFetch(this._createDeleteRequest(url))
+    post(body, ...url: string | string []) {
+        return this._doFetch(this._createPostRequest(body, url))
+    }
 
-        let replaySubject = new ReplaySubject(1)
-        observable.subscribe(replaySubject)
-
-        return replaySubject
+    getJson(...url: string | string []) {
+        return this._doFetch(this._createGetRequest(url))
     }
 
     getText(...url: string | string []) {

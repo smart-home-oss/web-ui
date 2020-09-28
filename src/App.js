@@ -9,6 +9,7 @@ import HousesComponent from "./app/houses/HousesComponent";
 import HouseDetailsComponent from "./app/houses/HouseDetailsComponent";
 import DevicesComponent from "./app/devices/DevicesComponent";
 import DeviceDetailsComponent from "./app/devices/DeviceDetailsComponent";
+import NewHouseForm from "./app/houses/NewHouseForm";
 
 class App extends React.Component {
 
@@ -24,8 +25,11 @@ class App extends React.Component {
                             <Redirect to="/houses" />
                         </Route>
 
+                        <Route exact path='/new/house' component={NewHouseForm} />
+
                         <Route exact path='/houses' component={HousesComponent} />
                         <Route exact path='/houses/:houseId' component={HouseDetailsComponent} />
+
                         <Route exact path='/devices' component={DevicesComponent} />
                         <Route exact path='/devices/:houseId' component={DeviceDetailsComponent} />
                     </div>

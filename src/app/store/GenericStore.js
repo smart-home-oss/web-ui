@@ -63,8 +63,8 @@ export default class GenericStore {
         return this.replaySubject
     }
 
-    refreshLoadingState(error?) {
-        if (error) {
+    refreshLoadingState(e?) {
+        if (e) {
             this.state = ERROR
             this.errorType = e.message.startsWith("NetworkError") ? NETWORK_ERROR : SERVER_ERROR
             this.errorMessage = e.message

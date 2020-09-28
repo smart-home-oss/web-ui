@@ -8,6 +8,7 @@ import {Row} from 'antd';
 import {ErrorResult} from "../shared/ErrorResult";
 import {CardSkeleton} from "../shared/CardSkeleton";
 import {ERROR, LOADED, LOADING} from "../store/GenericStore";
+import HousesMenu from "./HousesMenu";
 
 class HousesComponent extends React.Component<EmptyProps> {
 
@@ -15,21 +16,34 @@ class HousesComponent extends React.Component<EmptyProps> {
         housesStore.loadHouses();
     }
 
+    onCreate() {
+
+    }
+
     render() {
+        let content;
         switch (housesStore.state) {
             case LOADED:
                 let key = new KeyHelper();
                 let items = housesStore.houses.map(h => <HouseItem key={key.next()} house={h}/>);
                 items = (items.length < 1) ? <ErrorResult status={"NEW"}/> : items;
 
-                return <Row>{items}</Row>;
+                content = <Row>{items}</Row>;
+                break;
             case LOADING:
-                return <CardSkeleton/>;
+                content = <CardSkeleton/>;
+                break;
             case ERROR:
-                return <ErrorResult status={"warning"} message={housesStore.errorMessage} />;
-            default :
-                return <div>Just a nyan cat running..</div>;
+                content = <ErrorResult status={"warning"} message={housesStore.errorMessage} />;
+                break;
+            default:
+                content = <div>Just a nyan cat running..</div>;
         }
+
+        return <div>
+            <HousesMenu onCreate={() => this.onCreate()}/>
+            {content}
+        </div>
     }
 }
 
