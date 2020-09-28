@@ -1,7 +1,7 @@
 // @flow
 
 import {extendObservable} from "mobx";
-import House from "../houses/House";
+import House from "../houses/objects/House";
 import {HOUSE_MANAGER} from "./ApiResource";
 import {roomsStore} from "./RoomsStore";
 import {housesStore} from "./HousesStore";

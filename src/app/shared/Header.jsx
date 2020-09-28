@@ -1,22 +1,30 @@
 import React from 'react'
-import {Layout, Menu} from 'antd';
+import {Button, Col, Layout, Row} from 'antd';
 import {Link} from "react-router-dom";
+import {PlusCircleOutlined} from "@ant-design/icons";
 
-export class Header extends React.Component {
-    render() {
-        return <Layout.Header>
-            <Link to={{pathname: "/"}}>
-                <h1 className="logo">Smart House OSS</h1>
-            </Link>
+type Props = {
+    onCreate: () => {}
+}
+export default function Header(props: Props) {
+    return <Layout.Header>
+        <Row>
+            <Col span={8}>
+                <Link to={{pathname: "/"}}>
+                    <h1 className="logo">Smart House OSS</h1>
+                </Link>
+            </Col>
+            <Col span={16} offset={0} className={"align-right"}>
+                <Link key={"new-house-button"} to={"/new/house"}>
+                    <Button key="1" type="primary" icon={<PlusCircleOutlined />}>
+                        New house
+                    </Button>
+                </Link>
+            </Col>
+        </Row>
 
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['houses']}>
 
-                <Menu.Item key="houses">
-                    <Link to={"/houses"}>
-                        Houses
-                    </Link>
-                </Menu.Item>
-            </Menu>
-        </Layout.Header>;
-    }
+
+
+    </Layout.Header>;
 }

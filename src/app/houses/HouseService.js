@@ -2,8 +2,8 @@ import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "../store/ApiResource";
 import {housesStore} from "../store/HousesStore";
 import {ReplaySubject} from "rxjs";
-import NewHouseRequest from "./NewHouseRequest";
-import House from "./House";
+import NewHouseRequest from "./objects/NewHouseRequest";
+import House from "./objects/House";
 
 class HouseService {
 

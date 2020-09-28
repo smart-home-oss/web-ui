@@ -1,7 +1,7 @@
 import * as React from "react";
-import House from "./House";
+import House from "../objects/House";
 import {Avatar, Card, Col} from 'antd';
-import {PicsumImage} from "../shared/PicsumImage";
+import {PicsumImage} from "../../shared/PicsumImage";
 import {Link} from "react-router-dom";
 
 const {Meta} = Card;
@@ -13,7 +13,7 @@ type Props = {
 
 export default function HouseItem(props: Props) {
 
-    return <Col xs={12} sm={12} md={8} lg={8} xl={6}>
+    return <Col xs={24} sm={12} md={8} lg={8} xl={6}>
         <Link to={"/houses/" + props.house.id}>
             <Card
                 className={"house-item"}

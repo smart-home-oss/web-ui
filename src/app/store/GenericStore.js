@@ -7,7 +7,7 @@ import ApiResource from "./ApiResource"
 export const PENDING: string = "pending"
 export const LOADING: string = "loading"
 export const LOADED: string = "loaded"
-export const EMPTY: string = "no_houses"
+export const EMPTY: string = "empty"
 export const ERROR: string = "error"
 
 export const NETWORK_ERROR: string = "NetworkError"

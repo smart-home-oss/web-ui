@@ -2,7 +2,7 @@
 
 import {extendObservable} from "mobx";
 import {ReplaySubject} from "rxjs";
-import House from "../houses/House";
+import House from "../houses/objects/House";
 import {HOUSE_MANAGER} from "./ApiResource";
 import GenericStore, {PENDING} from "./GenericStore";
 

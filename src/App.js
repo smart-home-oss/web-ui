@@ -4,12 +4,12 @@ import {Redirect, Route} from "react-router-dom";
 import './App.scss';
 import {Layout} from 'antd';
 import {Footer} from "./app/shared/Footer";
-import {Header} from "./app/shared/Header";
+import Header from "./app/shared/Header";
 import HousesComponent from "./app/houses/HousesComponent";
 import HouseDetailsComponent from "./app/houses/HouseDetailsComponent";
 import DevicesComponent from "./app/devices/DevicesComponent";
 import DeviceDetailsComponent from "./app/devices/DeviceDetailsComponent";
-import NewHouseForm from "./app/houses/NewHouseForm";
+import NewHouseForm from "./app/houses/ui/NewHouseForm";
 
 class App extends React.Component {
 

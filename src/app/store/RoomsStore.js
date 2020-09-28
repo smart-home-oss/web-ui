@@ -2,10 +2,10 @@
 
 import {extendObservable} from "mobx";
 import {Observable, Subscriber} from "rxjs";
-import House from "../houses/House";
+import House from "../houses/objects/House";
 import {httpHelper} from "../helpers/HttpHelper";
 import {HOUSE_MANAGER} from "./ApiResource";
-import Room from "../houses/Room";
+import Room from "../rooms/Room";
 
 class RoomsStore {
 

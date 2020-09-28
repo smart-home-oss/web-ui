@@ -24,17 +24,7 @@ export default class RoomsForm extends React.Component<Params> {
             });
         }
 
-        return <table className="table">
-            <thead>
-            <tr>
-                <th title="Id">Id</th>
-                <th title="Name">Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {trs}
-            </tbody>
-        </table>
+        return <span>Rooms details</span>
     }
 
 }

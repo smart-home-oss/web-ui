@@ -2,13 +2,14 @@ import * as React from "react";
 import EmptyProps from "../helpers/EmptyProps";
 import {observer} from "mobx-react";
 import {roomsStore} from "../store/RoomsStore";
-import RoomsForm from "./RoomsForm";
+import RoomsForm from "../rooms/RoomsForm";
 import {ErrorResult} from "../shared/ErrorResult";
-import {Row} from "antd";
-import HouseDetailsMenu from "./HouseDetailsMenu";
+import {PageHeader} from "antd";
+import HouseDetailsMenu from "./ui/HouseDetailsMenu";
 import {currentHouseStore} from "../store/CurrentHouseStore";
-import {LOADED} from "../store/GenericStore";
+import {ERROR, LOADING} from "../store/GenericStore";
 import {houseService} from "./HouseService";
+import {CardSkeleton} from "../shared/CardSkeleton";
 
 class HouseDetailsComponent extends React.Component<EmptyProps> {
 
@@ -29,28 +30,33 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
     }
 
     render() {
-        let houseInfo, roomsForm
+        let roomsForm = <div/>
 
-        if (currentHouseStore.state === LOADED) {
-            houseInfo = currentHouseStore.current ?
-                <HouseDetailsMenu house={currentHouseStore.current} onDelete={(id) => this.onHouseDelete(id)}/>
-                :
-                <ErrorResult status={"404"} message={"We could not find this house"}/>;
+        if (currentHouseStore.state === ERROR) {
+            return <ErrorResult status={"404"} message={"We could not find this house"}/>;
         }
 
-        roomsForm = roomsStore.current ?
-            <RoomsForm current={roomsStore.current} rooms={roomsStore.rooms}/>
-            :
-            "No house = No rooms!"
+        if (currentHouseStore.state === LOADING) {
+            return <CardSkeleton/>;
+        }
 
-        return <div>
-            <Row>
-                {houseInfo}
-            </Row>
-            <Row>
-                {roomsForm}
-            </Row>
-        </div>
+        if (roomsStore.current) {
+            roomsForm = <RoomsForm current={roomsStore.current} rooms={roomsStore.rooms}/>
+        }
+
+        let h = currentHouseStore.current;
+
+        return <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title={h.name}
+            subTitle={"ID: " + h.id}
+            extra={[
+                <HouseDetailsMenu key={"menu"} house={h} onDelete={(id) => this.onHouseDelete(id)}/>
+            ]}
+        >
+            {roomsForm}
+        </PageHeader>
     }
 
 }
