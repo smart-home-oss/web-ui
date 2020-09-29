@@ -3,7 +3,6 @@
 import {extendObservable} from "mobx";
 import House from "../houses/objects/House";
 import {HOUSE_MANAGER} from "./ApiResource";
-import {roomsStore} from "./RoomsStore";
 import {housesStore} from "./HousesStore";
 import GenericStore, {PENDING} from "./GenericStore";
 
@@ -24,7 +23,6 @@ class CurrentHouseStore extends GenericStore {
         this.current = housesStore.getIndexed(id);
 
         if (this.current) {
-            roomsStore.loadByHouseId(this.current.id)
             this.refreshLoadingState()
         } else {
             this.callBackend(id)

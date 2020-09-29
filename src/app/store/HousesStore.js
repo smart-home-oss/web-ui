@@ -26,7 +26,7 @@ class HousesStore extends GenericStore {
     }
 
     loadHouses(): ReplaySubject {
-        this.load(
+        return this.load(
             "api/v1/houses",
             data => {
                 this.houses = []

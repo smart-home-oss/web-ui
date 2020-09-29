@@ -1,13 +1,12 @@
 import * as React from "react";
 import EmptyProps from "../helpers/EmptyProps";
 import {observer} from "mobx-react";
-import {roomsStore} from "../store/RoomsStore";
-import RoomsForm from "../rooms/RoomsForm";
+import RoomsComponent from "../rooms/RoomsComponent";
 import {ErrorResult} from "../shared/ErrorResult";
 import {PageHeader} from "antd";
 import HouseDetailsMenu from "./ui/HouseDetailsMenu";
 import {currentHouseStore} from "../store/CurrentHouseStore";
-import {ERROR, LOADING} from "../store/GenericStore";
+import {ERROR, LOADING, PENDING} from "../store/GenericStore";
 import {houseService} from "./HouseService";
 import {CardSkeleton} from "../shared/CardSkeleton";
 
@@ -30,18 +29,12 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
     }
 
     render() {
-        let roomsForm = <div/>
-
         if (currentHouseStore.state === ERROR) {
             return <ErrorResult status={"404"} message={"We could not find this house"}/>;
         }
 
-        if (currentHouseStore.state === LOADING) {
+        if (currentHouseStore.state === LOADING || currentHouseStore.state === PENDING) {
             return <CardSkeleton/>;
-        }
-
-        if (roomsStore.current) {
-            roomsForm = <RoomsForm current={roomsStore.current} rooms={roomsStore.rooms}/>
         }
 
         let h = currentHouseStore.current;
@@ -55,7 +48,7 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
                 <HouseDetailsMenu key={"menu"} house={h} onDelete={(id) => this.onHouseDelete(id)}/>
             ]}
         >
-            {roomsForm}
+            <RoomsComponent houseId={h.id}/>
         </PageHeader>
     }
 
