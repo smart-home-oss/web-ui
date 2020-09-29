@@ -24,7 +24,7 @@ class RoomsStore extends GenericStore {
 
     loadByHouseId(id: number): Observable {
         return this.load(
-            "api/v1/house-piece?houseId=" + id,
+            "api/v1/house-piece?houseId=" + id + "&size=999",
             data => {
                 this.rooms = []
 
