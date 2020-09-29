@@ -35,9 +35,6 @@ class RoomsComponent extends React.Component<Props> {
     }
 
     render() {
-        console.log("render ", roomsStore.state)
-        console.log("render ", roomsStore.rooms)
-
         if (roomsStore.state === ERROR) {
             return <ErrorResult status={"404"} message={"We could not find rooms in this house"}/>;
         }

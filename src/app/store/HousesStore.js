@@ -41,6 +41,7 @@ class HousesStore extends GenericStore {
     }
 
     putHouse(h: House) {
+        this.houses = this.houses.concat(h)
         this.indexed.set(h.id, h);
     }
 

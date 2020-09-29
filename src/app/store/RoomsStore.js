@@ -37,8 +37,7 @@ class RoomsStore extends GenericStore {
     }
 
     putRoom(r: Room) {
-        console.log("put ", r)
-        this.rooms.push(r)
+        this.rooms = this.rooms.concat(r)
         this.indexed.set(r.id, r);
     }
 
