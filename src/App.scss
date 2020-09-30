@@ -14,8 +14,20 @@
   margin-right: 10px;
 }
 
+.margin-top-small {
+  margin-top: 10px;
+}
+
+.margin-small {
+  margin: 10px;
+}
+
 .margin-left-small {
   margin-left: 10px;
+}
+
+.margin-left {
+  margin-left: 24px;
 }
 
 .site-layout-content {
@@ -35,4 +47,12 @@
 
 .align-right {
   text-align: right;
+}
+
+.room-tree {
+  border: 1px solid #737373
+}
+
+.room-tree-menu {
+  border-bottom: 1px solid #737373
 }

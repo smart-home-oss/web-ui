@@ -3,10 +3,7 @@ import {Button, Col, Layout, Row} from 'antd';
 import {Link} from "react-router-dom";
 import {PlusCircleOutlined} from "@ant-design/icons";
 
-type Props = {
-    onCreate: () => {}
-}
-export default function Header(props: Props) {
+export default function Header() {
     return <Layout.Header>
         <Row>
             <Col span={8}>

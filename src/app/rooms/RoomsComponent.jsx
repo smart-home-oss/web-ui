@@ -6,6 +6,7 @@ import {CardSkeleton} from "../shared/CardSkeleton";
 import {observer} from "mobx-react";
 import RoomsTree from "./ui/RoomsTree";
 import {roomService} from "./RoomService";
+import {Col, Row} from "antd";
 
 type Props = {
     houseId: number
@@ -20,7 +21,7 @@ class RoomsComponent extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>) {
-        if(this.props.houseId !== prevProps.houseId) {
+        if (this.props.houseId !== prevProps.houseId) {
             roomsStore.loadByHouseId(this.props.houseId)
         }
     }
@@ -49,16 +50,25 @@ class RoomsComponent extends React.Component<Props> {
             return <CardSkeleton/>;
         }
 
-        return <RoomsTree rooms={roomsStore.rooms}
-                          houseId={this.props.houseId}
-                          onSelect={(selectedKeys, info) => this.onSelect(selectedKeys, info)}
-                          onCreate={(name) => {
-                              this.onCreateRoom(name)
-                          }}
-                          onDelete={() => {
-                              this.onDeleteRoom()
-                          }}
-        />
+        return <Row>
+            <Col className={"room-tree"} span={4}>
+                <RoomsTree rooms={roomsStore.rooms}
+                           houseId={this.props.houseId}
+                           onSelect={(selectedKeys, info) => this.onSelect(selectedKeys, info)}
+                           onCreate={(name) => {
+                               this.onCreateRoom(name)
+                           }}
+                           onDelete={() => {
+                               this.onDeleteRoom()
+                           }}/>
+            </Col>
+            <Col className={"room-tree margin-left"} span={19}>
+                <span className={"margin-small"}>
+                    Info about the room and it's devices
+                </span>
+            </Col>
+        </Row>
+
     }
 }
 

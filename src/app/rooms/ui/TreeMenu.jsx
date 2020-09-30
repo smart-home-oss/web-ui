@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default function TreeMenu(props: Props) {
-    return <div>
+    return <div className={"room-tree-menu"} >
         <span>
             <Popover
                 content={<NewRoom onCreate={(name) => {
