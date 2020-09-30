@@ -21,6 +21,7 @@ export default class GenericStore {
     api: ApiResource
 
     subscription: Subscription
+    httpSubscription: Subscription
     replaySubject: ReplaySubject
 
     constructor(api: ApiResource) {
@@ -36,36 +37,41 @@ export default class GenericStore {
 
         this.subscription = new Observable(
             (observer: Subscriber) => {
-                httpHelper
-                    .getJson(this.api.host, uri)
-                    .subscribe(data => {
-                            onData(data)
+                this.httpSubscription =
+                    httpHelper
+                        .getJson(this.api.host, uri)
+                        .subscribe(data => {
+                                onData(data)
 
-                            this.refreshLoadingState()
+                                this.refreshLoadingState()
 
-                            observer.next(data)
-                            observer.complete()
-                        },
-                        e => {
-                            if (onError) {
-                                onError(e)
-                            }
+                                observer.next(data)
+                                observer.complete()
+                            },
+                            e => {
+                                if (onError) {
+                                    onError(e)
+                                }
 
-                            this.refreshLoadingState(e)
-                            console.error(e.message)
-                            observer.error(e)
-                        });
+                                this.refreshLoadingState(e)
+                                console.error(e.message)
+                                observer.error(e)
+                            });
             })
             .subscribe(this.replaySubject);
     }
 
     cancelOngoing() {
+        if (this.replaySubject) {
+            this.replaySubject.unsubscribe()
+        }
+
         if (this.subscription) {
             this.subscription.unsubscribe()
         }
 
-        if (this.replaySubject) {
-            this.replaySubject.unsubscribe()
+        if (this.httpSubscription) {
+            this.httpSubscription.unsubscribe()
         }
     }
 
