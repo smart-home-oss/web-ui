@@ -8,7 +8,7 @@ import TreeMenu from "./TreeMenu";
 type Props = {
     houseId: number,
     rooms: Room[],
-    onSelect: (any, any) => {},
+    onSelect: (Room) => {},
     onCreate: (string) => {},
     onDelete: () => {},
 }
@@ -21,11 +21,16 @@ export default function RoomsTree(props: Props) {
         treeData.push(TreeItem.fromRoom(r))
     })
 
+    const onSelect = (selectedKeys, info) => {
+        props.onSelect(info.node.room)
+    }
+
     return <div>
         <TreeMenu onCreate={(name) => {props.onCreate(name)}}
                   onDelete={props.onDelete}/>
         <Tree className={"margin-small"}
               showLine switcherIcon={<DownOutlined/>}
-              onSelect={props.onSelect} treeData={treeData}/>
+              onSelect={onSelect}
+              treeData={treeData}/>
     </div>
 }

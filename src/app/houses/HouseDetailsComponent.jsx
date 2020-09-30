@@ -9,8 +9,16 @@ import {currentHouseStore} from "../store/CurrentHouseStore";
 import {ERROR, LOADING, PENDING} from "../store/GenericStore";
 import {houseService} from "./HouseService";
 import {CardSkeleton} from "../shared/CardSkeleton";
+import Room from "../rooms/objects/Room";
 
 class HouseDetailsComponent extends React.Component<EmptyProps> {
+
+    constructor(props: P, context: any) {
+        super(props, context);
+        this.state = {
+            room: {}
+        }
+    }
 
     componentDidMount(): void {
         currentHouseStore.loadHouse(parseInt(this.props.match.params.houseId))
@@ -28,6 +36,10 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
                 })
     }
 
+    onRoomSelected(r: Room) {
+        this.setState({room: r})
+    }
+
     render() {
         if (currentHouseStore.state === ERROR) {
             return <ErrorResult status={"404"} message={"We could not find this house"}/>;
@@ -37,19 +49,23 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
             return <CardSkeleton/>;
         }
 
-        console.log("render details " + currentHouseStore.current.id)
+        let h = currentHouseStore.current;
+        let subTitle = "ID: " + h.id
+        subTitle += this.state.room ? " / Room : " + this.state.room.name : ""
 
         return <PageHeader
             ghost={false}
             onBack={() => window.history.back()}
-            title={currentHouseStore.current.name}
-            subTitle={"ID: " + currentHouseStore.current.id}
+            title={h.name}
+            subTitle={subTitle}
             extra={[
-                <HouseDetailsMenu key={"menu"} house={currentHouseStore.current}
+                <HouseDetailsMenu key={"menu"}
+                                  house={h}
                                   onDelete={(id) => this.onHouseDelete(id)}/>
             ]}
         >
-            <RoomsComponent houseId={currentHouseStore.current.id}/>
+            <RoomsComponent houseId={h.id}
+                            onRoomSelected={(r) => this.onRoomSelected(r)}/>
         </PageHeader>
     }
 

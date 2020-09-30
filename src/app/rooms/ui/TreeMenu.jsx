@@ -10,31 +10,28 @@ type Props = {
 
 export default function TreeMenu(props: Props) {
     return <div className={"room-tree-menu"} >
-        <span>
-            <Popover
-                content={<NewRoom onCreate={(name) => {
-                    props.onCreate(name)
-                }}/>}
-                title="Add new room" trigger="click">
+        <Popover
+            content={<NewRoom onCreate={(name) => {
+                props.onCreate(name)
+            }}/>}
+            title="Add new room" trigger="click">
 
-                  <Button shape="square" icon={<PlusOutlined/>}/>
-            </Popover>
-            <Popconfirm
-                key="confirm-delete-button"
-                title="Are you sure delete this room ?"
-                onConfirm={() => {
-                    message.success('The room is going to be deleted')
-                    props.onDelete();
-                }}
-                onCancel={() => {
-                    message.info('Sure, no hurry.')
-                }}
-                okText="Delete the room ?"
-                cancelText="Nah, maybe later"
-            >
-                <Button shape="square" icon={<MinusOutlined/>}/>
-            </Popconfirm>
-
-        </span>
+            <Button shape="square" icon={<PlusOutlined/>}>Add room</Button>
+        </Popover>
+        <Popconfirm
+            key="confirm-delete-button"
+            title="Are you sure delete this room ?"
+            onConfirm={() => {
+                message.success('The room is going to be deleted')
+                props.onDelete();
+            }}
+            onCancel={() => {
+                message.info('Sure, no hurry.')
+            }}
+            okText="Delete the room ?"
+            cancelText="Nah, maybe later"
+        >
+            <Button shape="square" icon={<MinusOutlined/>}>Delete room</Button>
+        </Popconfirm>
     </div>
 }
