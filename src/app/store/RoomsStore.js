@@ -1,7 +1,6 @@
 // @flow
 
 import {extendObservable} from "mobx";
-import {Observable} from "rxjs";
 import {HOUSE_MANAGER} from "./ApiResource";
 import Room from "../rooms/objects/Room";
 import GenericStore, {PENDING} from "./GenericStore";
@@ -22,8 +21,12 @@ class RoomsStore extends GenericStore {
         });
     }
 
-    loadByHouseId(id: number): Observable {
-        return this.load(
+    loadByHouseId(id: number) {
+        console.log("load rooms for house ", id)
+        this.rooms = [];
+        this.indexed = new Map<number, Room>()
+
+        this.load(
             "api/v1/house-piece?houseId=" + id + "&size=999",
             data => {
                 this.rooms = []
@@ -33,6 +36,8 @@ class RoomsStore extends GenericStore {
                     this.rooms.push(r);
                     this.indexed.set(r.id, r);
                 });
+
+                console.log("loaded rooms count ", this.rooms.length)
             })
     }
 

@@ -21,7 +21,7 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
             .delete(id)
             .subscribe(
                 () => {
-                    this.props.history.push("/");
+                    this.props.history.push("/")
                 },
                 e => {
                     console.error(e)
@@ -37,18 +37,19 @@ class HouseDetailsComponent extends React.Component<EmptyProps> {
             return <CardSkeleton/>;
         }
 
-        let h = currentHouseStore.current;
+        console.log("render details " + currentHouseStore.current.id)
 
         return <PageHeader
             ghost={false}
             onBack={() => window.history.back()}
-            title={h.name}
-            subTitle={"ID: " + h.id}
+            title={currentHouseStore.current.name}
+            subTitle={"ID: " + currentHouseStore.current.id}
             extra={[
-                <HouseDetailsMenu key={"menu"} house={h} onDelete={(id) => this.onHouseDelete(id)}/>
+                <HouseDetailsMenu key={"menu"} house={currentHouseStore.current}
+                                  onDelete={(id) => this.onHouseDelete(id)}/>
             ]}
         >
-            <RoomsComponent houseId={h.id}/>
+            <RoomsComponent houseId={currentHouseStore.current.id}/>
         </PageHeader>
     }
 

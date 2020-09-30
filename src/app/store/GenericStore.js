@@ -1,6 +1,6 @@
 // @flow
 
-import {Observable, ReplaySubject, Subscriber} from "rxjs"
+import {Observable, ReplaySubject, Subscriber, Subscription} from "rxjs"
 import {httpHelper} from "../helpers/HttpHelper"
 import ApiResource from "./ApiResource"
 
@@ -20,47 +20,53 @@ export default class GenericStore {
     errorMessage: string
     api: ApiResource
 
-    observable: Observable = new Observable()
+    subscription: Subscription
     replaySubject: ReplaySubject
 
     constructor(api: ApiResource) {
         this.api = api;
     }
 
-    load(uri: string, onData: (data) => {}, onError?: (e) => {}): ReplaySubject {
-        if (this.state === LOADING) {
-            return this.replaySubject
-        }
+    load(uri: string, onData: (any) => {}, onError?: (any) => {}) {
+        this.cancelOngoing();
 
         this.state = LOADING;
 
-        this.observable = new Observable((observer: Subscriber) => {
-            httpHelper
-                .getJson(this.api.host, uri)
-                .subscribe(data => {
-                        onData(data)
-
-                        this.refreshLoadingState()
-
-                        observer.next(data)
-                        observer.complete()
-                    },
-                    e => {
-                        if (onError) {
-                            onError(e)
-                        }
-
-                        this.refreshLoadingState(e)
-                        console.error(e.message)
-                        observer.error(e)
-                    });
-        });
-
         this.replaySubject = new ReplaySubject(1)
 
-        this.observable.subscribe(this.replaySubject)
+        this.subscription = new Observable(
+            (observer: Subscriber) => {
+                httpHelper
+                    .getJson(this.api.host, uri)
+                    .subscribe(data => {
+                            onData(data)
 
-        return this.replaySubject
+                            this.refreshLoadingState()
+
+                            observer.next(data)
+                            observer.complete()
+                        },
+                        e => {
+                            if (onError) {
+                                onError(e)
+                            }
+
+                            this.refreshLoadingState(e)
+                            console.error(e.message)
+                            observer.error(e)
+                        });
+            })
+            .subscribe(this.replaySubject);
+    }
+
+    cancelOngoing() {
+        if (this.subscription) {
+            this.subscription.unsubscribe()
+        }
+
+        if (this.replaySubject) {
+            this.replaySubject.unsubscribe()
+        }
     }
 
     refreshLoadingState(e?) {

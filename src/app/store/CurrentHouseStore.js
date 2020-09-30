@@ -20,6 +20,8 @@ class CurrentHouseStore extends GenericStore {
     }
 
     loadHouse(id: number) {
+        console.log("load house " + id)
+
         this.current = housesStore.getIndexed(id);
 
         if (this.current) {

@@ -1,7 +1,6 @@
 // @flow
 
 import {extendObservable} from "mobx";
-import {ReplaySubject} from "rxjs";
 import House from "../houses/objects/House";
 import {HOUSE_MANAGER} from "./ApiResource";
 import GenericStore, {PENDING} from "./GenericStore";
@@ -25,8 +24,8 @@ class HousesStore extends GenericStore {
         return this.indexed.get(id);
     }
 
-    loadHouses(): ReplaySubject {
-        return this.load(
+    loadHouses() {
+        this.load(
             "api/v1/houses",
             data => {
                 this.houses = []

@@ -5,7 +5,6 @@ import {ErrorResult} from "../shared/ErrorResult";
 import {CardSkeleton} from "../shared/CardSkeleton";
 import {observer} from "mobx-react";
 import RoomsTree from "./ui/RoomsTree";
-import {currentHouseStore} from "../store/CurrentHouseStore";
 import {roomService} from "./RoomService";
 
 type Props = {
@@ -20,21 +19,28 @@ class RoomsComponent extends React.Component<Props> {
         roomsStore.loadByHouseId(this.props.houseId)
     }
 
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        if(this.props.houseId !== prevProps.houseId) {
+            roomsStore.loadByHouseId(this.props.houseId)
+        }
+    }
+
     onSelect = (selectedKeys, info) => {
         this.selectedRoomId = info.node.key
     };
 
     onCreateRoom(name: string) {
-        roomService.create(currentHouseStore.current.id, name)
+        roomService.create(this.props.houseId, name)
     }
 
     onDeleteRoom() {
-        if(this.selectedRoomId) {
+        if (this.selectedRoomId) {
             roomService.delete(this.selectedRoomId)
         }
     }
 
     render() {
+        console.log("render rooms ", this.props.houseId)
         if (roomsStore.state === ERROR) {
             return <ErrorResult status={"404"} message={"We could not find rooms in this house"}/>;
         }
@@ -44,10 +50,14 @@ class RoomsComponent extends React.Component<Props> {
         }
 
         return <RoomsTree rooms={roomsStore.rooms}
-                          houseId={currentHouseStore.current.id}
+                          houseId={this.props.houseId}
                           onSelect={(selectedKeys, info) => this.onSelect(selectedKeys, info)}
-                          onCreate={(name) => {this.onCreateRoom(name)}}
-                          onDelete={() => {this.onDeleteRoom()}}
+                          onCreate={(name) => {
+                              this.onCreateRoom(name)
+                          }}
+                          onDelete={() => {
+                              this.onDeleteRoom()
+                          }}
         />
     }
 }
